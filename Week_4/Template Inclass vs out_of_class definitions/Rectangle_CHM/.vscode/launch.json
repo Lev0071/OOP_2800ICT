@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/yasinc/Desktop/OOP_2800ICT/Week_4/Inclass vs out_of_class definitions/Rectangle_CHM",
+      "program": "/Users/yasinc/Desktop/OOP_2800ICT/Week_4/Inclass vs out_of_class definitions/Rectangle_CHM/build/Debug/outDebug"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+Ctrl + Alt + B to build the program.
+Ctrl + Alt + R to run the program.
+
+Replace --std=c++23 with: --std=c++2b
+
+For Windows & Linux:
+
+    Press Alt + Shift + F to format the entire document.
+
+For macOS:
+
+    Press Option + Shift + F to format the entire document.
+
+Compile on Terminal
+clang++ -std=c++20 -Wall -Wextra -Wpedantic helloworld.cpp -o helloworld
+clang++ -std=c++20 -Wall -Wextra -Wpedantic helloworld.cpp -o helloworld
+
+Run on terminal:
+./helloworld
+
+
+cout << "Type of newEnd: " << typeid(newEnd).name() << endl;
+    exit(0);
+
+Two files that work together:
+g++ -std=c++2b main.cpp RectangleNonTemplate.cpp -o main
+g++ -std=c++2b main.cpp -o main
+
+Run
+./main
