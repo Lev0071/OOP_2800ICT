@@ -1,0 +1,42 @@
+=== References vs Pointers in C++ ===
+
+1. Reference (&)
+----------------
+Example:
+    BaseClass& b1 = d;
+
+- Must be initialized immediately
+- Cannot be null
+- Automatically dereferenced
+- Acts like an alias to the original object
+
+Usage:
+    b1.Y();  // No need for -> or *
+
+2. Pointer (*)
+--------------
+Example:
+    BaseClass* ptr = &d;
+
+- Can be null
+- Can be reassigned
+- Requires explicit dereferencing
+
+Usage:
+    ptr->Y();    // Arrow operator
+    (*ptr).Y();  // Manual dereference
+
+Polymorphism Note:
+------------------
+If Y() is marked as virtual and d is a DerivedClass object,
+then:
+
+    b1.Y();     // calls DerivedClass::Y()
+    ptr->Y();   // also calls DerivedClass::Y()
+
+→ Both allow **runtime polymorphism** if `Y()` is virtual.
+
+Analogy:
+--------
+- Reference: like a nickname — always refers to the same person.
+- Pointer  : like a home address — can be empty, changed, or even invalid.

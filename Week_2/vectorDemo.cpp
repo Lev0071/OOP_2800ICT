@@ -47,5 +47,7 @@ int main(){
     vec.shrink_to_fit();
     cout << "Size: " << vec.size() << endl;
     cout << "Capacity: " << vec.capacity() << endl;
+    vec.insert(vec.begin(),10);printNumbers(vec,"vec.insert(vec.begin(),10)");
+    vec.insert(vec.end()-1,90);printNumbers(vec,"vec.insert(vec.end()-1,90)");
     return 0;
 } 

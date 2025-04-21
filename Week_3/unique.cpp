@@ -1,3 +1,7 @@
+// iterator unique(iterator1, iterator2)
+// Removing adjacent duplicates? → No sort needed
+// Removing all duplicates?     → Yes, sort first
+
 #include <iostream>
 #include <vector>
 #include <array>
@@ -28,7 +32,7 @@ int main(){
         8, 8, 8, 8, 8, 8, 8, 8, 
         9, 9, 9, 9, 9, 9, 9, 9, 9, 
        10,10,10,10,10,10,10,10,10,10,
-       11,12,11,11};
+       11,11,11,11,11,11,11,11,11,11,11};
     cout << "Initail vector" << endl;
     myPrint(vec);
     auto newEnd = unique(vec.begin(),vec.end());

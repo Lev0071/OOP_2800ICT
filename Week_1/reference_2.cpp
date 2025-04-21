@@ -38,19 +38,27 @@ int main(){
     cout << "Value of num_1 reference: " << w << endl;
     square(num_1);
     cout << "Value of num_1 after function call: " << num_1 << endl;
+    cout << "Value of num_1 reference after function call: " << w << endl;
+    cout << "################################################" << endl;
 
     cout << "Value of num_2: " << num_2 << endl; 
     cout << "Value of num_2 reference: " << x << endl;
     square(num_2);
-    cout << "Value of num_2 after function call: " << num_2 << endl; 
+    cout << "Value of num_2 after function call: " << num_2 << endl;
+    cout << "Value of num_2 reference after function call: " << x << endl;
+    cout << "################################################" << endl;
 
     cout << "Value of num_3: " << num_3 << endl; 
     cout << "Value of num_3 reference: " << y << endl;
     square(num_3);
     cout << "Value of num_3 after function call: " << num_3 << endl; 
+    cout << "Value of num_3 reference after function call: " << y << endl;
+    cout << "################################################" << endl;
 
     cout << "Value of letter: " << letter << endl; 
     cout << "Value of letter reference: " << z << endl;
     flipCase(letter);
     cout << "Value of letter after function call: " << letter << endl; 
+    cout << "Value of letter reference after function call: " << z << endl;
+    cout << "################################################" << endl;
 }

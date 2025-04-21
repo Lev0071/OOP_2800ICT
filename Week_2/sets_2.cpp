@@ -28,7 +28,7 @@ int main(){
     if (iter != names.end()){
         cout << *iter << " was found.\n";
     }else{
-        cout << *iter << "Karen was NOT found.\n";
+        cout << "Karen was NOT found.\n";
     }
 
     return 0;

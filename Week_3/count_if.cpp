@@ -17,6 +17,14 @@ int main(){
     // Print the count of odd number
     cout << "There are " << oddCount << " odd numbers in the vector";
     cout << endl;
+    
+    int evenCount = count_if(numbers.begin(),numbers.end(),[](int n){
+        return n % 2 == 0;
+    });
+    
+    // Print the count of even number
+    cout << "There are " << evenCount << " even numbers in the vector";
+    cout << endl;
 
     return 0;
 }

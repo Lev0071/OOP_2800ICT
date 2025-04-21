@@ -28,21 +28,36 @@ int main(){
     for_each(vec.begin(),vec.end(),myPrint);cout << endl;
     cout << "Find the first even or odd value ? (e/o): " << endl;
     cin >> find_value;
+    int state = 1;
 
-    if(find_value == 'e'){
-        auto it = find_if(vec.begin(),vec.end(),is_Even);
+    while(state==1){
+        if(find_value == 'e'){
+        //auto it = find_if(vec.begin(),vec.end(),is_Even);
+        auto it = find_if(vec.begin(),vec.end(),[](int n){return n%2 == 0;});
         if(it != vec.end()){
             cout << "Found even value " << *it << " at position " << (it-vec.begin()) << endl;
         }else{
             cout << "No even values found " << endl;
         }
     }else if(find_value == 'o'){
-        auto it = find_if(vec.begin(),vec.end(),is_Odd);
+        //auto it = find_if(vec.begin(),vec.end(),is_Odd);
+        auto it = find_if(vec.begin(),vec.end(),[](int n){return n%2 != 0;});
         if(it != vec.end()){
             cout << "Found odd value " << *it << " at position " << (it-vec.begin()) << endl;
         }else{
             cout << "No odd values found " << endl;
         }
+    }
+    cout << "Continue ? (y/n): " << endl;
+    cin >> find_value;
+    if(find_value == 'y'){
+        int state = 1;
+        cout << "Find the first even or odd value ? (e/o): " << endl;
+        cin >> find_value;
+    }else{
+        state = 0;
+    }
+    
     }
     
     return 0;

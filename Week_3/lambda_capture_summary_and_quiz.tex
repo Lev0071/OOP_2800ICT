@@ -1,0 +1,109 @@
+
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\usepackage{fancyvrb}
+\usepackage{titlesec}
+\geometry{a4paper, margin=1in}
+\titleformat{\section}[block]{\large\bfseries}{\thesection.}{0.5em}{}
+
+\title{Understanding Lambda Capture in C++}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section*{Case 1: No capture, no outside variables used}
+\addcontentsline{toc}{section}{Case 1: No capture, no outside variables used}
+\begin{verbatim}
+auto sayHi = []() {
+    cout << "Hi!" << endl;
+};
+sayHi();  // Output: Hi!
+\end{verbatim}
+
+\section*{Case 2: Capture nothing, but tries to use an outside variable (Error)}
+\addcontentsline{toc}{section}{Case 2: Capture nothing, but tries to use an outside variable (Error)}
+\begin{verbatim}
+int x = 5;
+auto printX = []() {
+    // cout << x;  // ❌ Error: 'x' is not captured
+};
+\end{verbatim}
+
+\section*{Case 3: Capture by value \texttt{[=]} (copy)}
+\addcontentsline{toc}{section}{Case 3: Capture by value [=] (copy)}
+\begin{verbatim}
+int x = 5;
+auto printX = [=]() {
+    cout << "x = " << x << endl;  // x is copied
+};
+printX();  // Output: x = 5
+\end{verbatim}
+
+\section*{Case 4: Capture by reference \texttt{[&]} (live link to outside)}
+\addcontentsline{toc}{section}{Case 4: Capture by reference [&] (live link to outside)}
+\begin{verbatim}
+int x = 5;
+auto modifyX = [&]() {
+    x += 10;  // modifies the original x
+};
+modifyX();
+cout << x << endl;  // Output: 15
+\end{verbatim}
+
+\section*{Optional: Capture specific variables}
+\addcontentsline{toc}{section}{Optional: Capture specific variables}
+\begin{verbatim}
+int x = 5, y = 10;
+
+auto custom = [x, &y]() {
+    cout << "x (copied): " << x << ", y (referenced): " << y << endl;
+    // y += 1; // allowed
+    // x += 1; // ❌ x is read-only (captured by value)
+};
+\end{verbatim}
+
+\section*{Lambda Capture Quiz}
+\addcontentsline{toc}{section}{Lambda Capture Quiz}
+
+\textbf{1.} What will the following code print?
+
+\begin{verbatim}
+int x = 3;
+auto f = [=]() {
+    return x + 2;
+};
+cout << f();
+\end{verbatim}
+
+\textbf{a)} 2 \quad \textbf{b)} 3 \quad \textbf{c)} 5 \quad \textbf{d)} Error
+
+\vspace{1em}
+
+\textbf{2.} Which capture mode allows modifying the original variable?
+
+\textbf{a)} [] \quad \textbf{b)} [=] \quad \textbf{c)} [&] \quad \textbf{d)} [x]
+
+\vspace{1em}
+
+\textbf{3.} What will happen in the following case?
+
+\begin{verbatim}
+int x = 10;
+auto f = []() {
+    cout << x;
+};
+\end{verbatim}
+
+\textbf{a)} Prints 10 \quad \textbf{b)} Error \quad \textbf{c)} Prints 0 \quad \textbf{d)} Undefined behavior
+
+\vspace{2em}
+\textbf{Answers:} \\
+1. c) 5 \\
+2. c) [&] \\
+3. b) Error
+
+\end{document}

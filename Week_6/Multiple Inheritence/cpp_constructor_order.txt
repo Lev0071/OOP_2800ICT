@@ -1,0 +1,28 @@
+
+In C++, when you define:
+
+    class ChildClass : public ParentClass2, public ParentClass1
+
+The constructor call order will be:
+
+1. ParentClass2 constructor
+2. ParentClass1 constructor
+3. ChildClass constructor
+
+Why?
+Because C++ always calls base class constructors in the order of appearance in the inheritance list,
+not the order in the initializer list or the source code.
+
+So even if you write:
+
+    ChildClass(...) : ParentClass1(...), ParentClass2(...) { }
+
+The actual execution will still go:
+- ParentClass2 constructor
+- ParentClass1 constructor
+- Then ChildClass constructor
+
+Summary Rule:
+
+- Construction order = Order of base classes in `class ChildClass : ...` declaration
+- Destruction order = Reverse of construction (ChildClass → ParentClass1 → ParentClass2)

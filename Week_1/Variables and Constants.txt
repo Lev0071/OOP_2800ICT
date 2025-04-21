@@ -1,0 +1,85 @@
+// Use C# in editor
+====================================
+ C++ VARIABLES & CONSTANTS SUMMARY
+====================================
+
+1. VARIABLE DECLARATION & INITIALIZATION
+----------------------------------------
+
+Syntax 1: Copy Initialization
+    int a = 5;              // Standard C-style initialization
+    double b = 3.14;
+
+Syntax 2: Direct Initialization
+    int a(5);               // Function-style constructor call
+    double b(3.14);
+
+Syntax 3: List/Brace Initialization (C++11+)
+    int a{5};               // Preferred - safer
+    double b{3.14};
+
+    // ❌ Prevents narrowing
+    int c{3.14};            // Error: narrowing from double to int
+
+Syntax 4: Copy-list Initialization (C++11+)
+    int a = {5};
+    double b = {3.14};
+
+Notes:
+- List initialization (`{}`) is the safest as it prevents data loss.
+- Copy and direct initialization allow implicit conversions.
+
+
+2. CONSTANTS
+------------
+
+const keyword:
+    const int MAX = 100;           // Value cannot be changed after initialization
+
+constexpr keyword (C++11+):
+    constexpr int SIZE = 10;       // Value known at compile time
+    constexpr double PI = 3.1415;
+
+Difference:
+- const: runtime constant (may or may not be known at compile time)
+- constexpr: compile-time constant
+
+Best Practice:
+- Use `constexpr` when the value is truly constant and known at compile time.
+- Use `const` for values that do not change after initialization but may be set at runtime.
+
+
+3. VARIABLE TYPES EXAMPLES
+--------------------------
+
+int    age = 25;
+float  temp = 36.6f;
+double pi = 3.14159;
+char   grade = 'A';
+bool   isOpen = true;
+
+
+4. AUTO TYPE DEDUCTION (C++11+)
+-------------------------------
+
+auto x = 5;          // int
+auto y = 3.14;       // double
+auto name = "John";  // const char*
+
+Notes:
+- Use `auto` for cleaner code, especially with complex types.
+- Avoid overusing `auto` if it makes code unclear.
+
+
+5. BEST PRACTICES
+-----------------
+
+✓ Use `int x{value};` over `int x = value;` for safety.
+✓ Initialize variables when declared.
+✓ Use `const` and `constexpr` to protect against accidental changes.
+✓ Prefer `auto` for iterators and complex types when it improves readability.
+
+
+=====================
+ END OF SUMMARY FILE
+=====================
