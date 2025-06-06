@@ -1,0 +1,2 @@
+std::unique_ptr<int> ptr = std::make_unique<int>(10);
+auto ptr = std::make_unique<int>(10);

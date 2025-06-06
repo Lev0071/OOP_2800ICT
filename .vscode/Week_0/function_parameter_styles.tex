@@ -1,0 +1,115 @@
+
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\usepackage{fancyvrb}
+\usepackage{titlesec}
+\usepackage{amsmath}
+\geometry{a4paper, margin=1in}
+\titleformat{\section}[block]{\large\bfseries}{\thesection.}{0.5em}{}
+
+\title{Function Parameter Styles in C++}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section*{When to Use Each Form}
+\addcontentsline{toc}{section}{When to Use Each Form}
+
+\begin{tabular}{|l|p{8cm}|p{4cm}|}
+\hline
+\textbf{Parameter Style} & \textbf{When to Use} & \textbf{Return Needed for Changes to Persist?} \\
+\hline
+\texttt{int num, float x} & For \textbf{small built-in types} (\texttt{int}, \texttt{float}, \texttt{char}) -- copying is cheap. & Yes, if caller needs result \\
+\hline
+\texttt{const Type\& obj} & For \textbf{large objects}, or classes -- avoids copy and prevents changes. & Not applicable (read-only) \\
+\hline
+\texttt{Type obj} & If the function \textbf{needs a copy} (e.g., to modify independently). Changes made will \textbf{not} affect the original unless a modified copy is \textbf{returned}. & \textbf{Yes} \\
+\hline
+\texttt{Type\& obj} & If the function needs to \textbf{modify the caller's object} directly. No need to return unless chaining or feedback is desired. & \textbf{No} \\
+\hline
+\end{tabular}
+
+\vspace{1em}
+\noindent\textbf{Note:} When using \texttt{Type obj} (pass-by-value), changes made inside the function do not affect the original object unless the modified value is explicitly \texttt{returned} and stored in the caller.
+\newpage
+\section{Examples}
+
+\subsection*{1. Small Built-in Types}
+\begin{verbatim}
+#include <iostream>
+void printSum(int a, float b) {
+    std::cout << "Sum: " << (a + b) << std::endl;
+}
+\end{verbatim}
+
+\subsection*{2. const Type\& obj — No Modification}
+\begin{verbatim}
+#include <iostream>
+#include <string>
+class Book {
+public:
+    std::string title;
+    Book(std::string t) : title(t) {}
+};
+
+void displayBook(const Book& b) {
+    std::cout << "Book: " << b.title << std::endl;
+}
+\end{verbatim}
+
+\subsection*{3. Type obj — Make a Copy}
+\begin{verbatim}
+#include <iostream>
+#include <string>
+
+class Book {
+public:
+    std::string title;
+    Book(std::string t) : title(t) {}
+};
+
+void backupBook(Book b) {
+    b.title = "Backup of " + b.title;
+    std::cout << "Inside function: " << b.title << std::endl;
+}
+\end{verbatim}
+\newpage
+\subsection*{4. Type\& obj — Modify Caller}
+\begin{verbatim}
+#include <iostream>
+#include <string>
+
+class Book {
+public:
+    std::string title;
+    Book(std::string t) : title(t) {}
+};
+
+void renameBook(Book& b) {
+    b.title = "Updated: " + b.title;
+}
+\end{verbatim}
+
+\subsection*{5. Main Function to Demonstrate All}
+\begin{verbatim}
+int main() {
+    printSum(3, 4.5f);
+
+    Book original("C++ Primer");
+
+    displayBook(original);
+
+    backupBook(original);
+    std::cout << "After backupBook: " << original.title << std::endl;
+
+    renameBook(original);
+    std::cout << "After renameBook: " << original.title << std::endl;
+
+    return 0;
+}
+\end{verbatim}
+
+\end{document}

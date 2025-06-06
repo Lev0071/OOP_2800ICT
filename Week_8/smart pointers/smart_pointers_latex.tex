@@ -1,0 +1,509 @@
+
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyvrb}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\titleformat{\section}[block]{\Large\bfseries}{\thesection.}{0.5em}{}
+\title{Smart Pointers in C++}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section*{Unique Pointer Demo}
+\addcontentsline{toc}{section}{Unique Pointer Demo}
+
+\subsection*{Code}
+\begin{Verbatim}[fontsize=\small,frame=single]
+#include <iostream>
+#include <memory> // for unique_ptr and make_unique
+
+void demoUniquePtr()
+{
+    int a_int = 10;
+
+    std::unique_ptr<int> ptr = std::make_unique<int>(10);
+
+    std::cout << "Address: " << ptr.get() << std::endl;
+    std::cout << "Value: " << *ptr << std::endl;
+    std::cout << "Value: " << *ptr.get() << std::endl;
+
+    std::unique_ptr<int> ptr1 = std::make_unique<int>(42);
+
+    // std::unique_ptr<int> ptr2 = ptr1; // ❌ Not allowed — copy constructor is deleted
+    std::unique_ptr<int> ptr2 = std::move(ptr1); // ✅ Ownership transferred from ptr1 to ptr2
+
+    if (ptr2)
+        std::cout << "Transferred value: " << *ptr2 << std::endl;
+}
+
+int main()
+{
+    demoUniquePtr();
+    return 0;
+}
+// g++ -std=c++11 -o unique_ptr_demo unique_ptr_demo.cpp
+// g++ -std=c++14 -o unique_ptr_demo unique_ptr_demo.cpp
+
+// ./unique_ptr_demo
+\end{Verbatim}
+
+\subsection*{Sample Output}
+\begin{tcolorbox}[colback=black!5!white,colframe=black!75!white]
+Sample output here...
+\end{tcolorbox}
+\newpage
+
+\section*{Unique Pointer Resource Example}
+\addcontentsline{toc}{section}{Unique Pointer Resource Example}
+
+\subsection*{Code}
+\begin{Verbatim}[fontsize=\small,frame=single]
+#include <iostream>
+#include <memory>
+
+class Resource {
+private:
+    int flag = 0;
+
+public:
+    Resource(int flag = 1) : flag(flag) {
+        std::cout << flag << " | Resource acquired\n";
+    }
+
+    ~Resource() {
+        std::cout << flag << " | Resource destroyed\n";
+    }
+
+    friend std::ostream& operator<<(std::ostream& out, const Resource& res);
+};
+
+std::ostream& operator<<(std::ostream& out, const Resource& res) {
+    out << "Resource(flag=" << res.flag << ")";
+    return out;
+}
+
+void someFunction2() {
+    auto ptr = std::make_unique<Resource>(2);
+
+    std::cout << "*ptr = " << *ptr << std::endl;
+
+    // Address of the smart pointer object itself
+    std::cout << "Address of ptr (unique_ptr object): " << &ptr << std::endl;
+
+    // Address of the actual resource managed by the smart pointer
+    std::cout << "Address of resource (ptr.get()):    " << ptr.get() << std::endl;
+}
+
+int main() {
+    someFunction2();
+    std::cout << "End of main\n";
+    return 0;
+}
+
+// g++ -std=c++14  unique_ptr_resource_demo.cpp -o unique_ptr_resource_demo
+\end{Verbatim}
+
+\subsection*{Sample Output}
+\begin{tcolorbox}[colback=black!5!white,colframe=black!75!white]
+Sample output here...
+\end{tcolorbox}
+\newpage
+
+\section*{Unique Pointer Transfer}
+\addcontentsline{toc}{section}{Unique Pointer Transfer}
+
+\subsection*{Code}
+\begin{Verbatim}[fontsize=\small,frame=single]
+// unique_ptr_1.cpp
+#include <iostream>
+#include <memory> // for unique_ptr
+
+void demoUniquePtr()
+{
+    std::unique_ptr<int> ptr = std::make_unique<int>(10);
+    std::cout << "Value: " << *ptr << std::endl;
+
+    std::unique_ptr<int> ptr1 = std::make_unique<int>(42);
+    // std::unique_ptr<int> ptr2 = ptr1; // ❌ Copying not allowed
+    std::unique_ptr<int> ptr2 = std::move(ptr1); // ✅ Ownership transferred
+
+    if (ptr2)
+        std::cout << "Transferred value: " << *ptr2 << std::endl;
+}
+
+int main()
+{
+    demoUniquePtr();
+    return 0;
+}
+// g++ -std=c++14 -o unique_ptr_1 unique_ptr_1.cpp
+// ./unique_ptr_1
+\end{Verbatim}
+
+\subsection*{Sample Output}
+\begin{tcolorbox}[colback=black!5!white,colframe=black!75!white]
+Sample output here...
+\end{tcolorbox}
+\newpage
+
+\section*{Smart Pointer Overview}
+\addcontentsline{toc}{section}{Smart Pointer Overview}
+
+\subsection*{Code}
+\begin{Verbatim}[fontsize=\small,frame=single]
+#include <iostream>
+#include <memory>
+
+class Book {
+public:
+    Book(const std::string& name) : title(name) {
+        std::cout << "📘 Book \"" << title << "\" created.\n";
+    }
+
+    ~Book() {
+        std::cout << "🔥 Book \"" << title << "\" destroyed.\n";
+    }
+
+    void read() const {
+        std::cout << "📖 Reading \"" << title << "\"...\n";
+    }
+
+private:
+    std::string title;
+};
+
+int main() {
+    std::cout << "=== Unique Pointer Section ===\n";
+    {
+        std::unique_ptr<Book> unique1 = std::make_unique<Book>("Unique Book 1");
+        std::unique_ptr<Book> unique2 = std::make_unique<Book>("Unique Book 2");
+
+        unique1->read();
+        unique2->read();
+
+        // Exiting this scope → both unique_ptrs are destroyed
+    }
+
+    std::cout << "\n=== Shared Pointer Section ===\n";
+    {
+        std::shared_ptr<Book> shared1 = std::make_shared<Book>("Shared Book");
+        {
+            std::shared_ptr<Book> shared2 = shared1; // shared2 also points to the same object
+
+            shared1->read();
+            shared2->read();
+
+            std::cout << "➡️ shared2 is going out of scope...\n";
+        } // shared2 is destroyed here, but shared1 still exists
+
+        std::cout << "➡️ shared1 is going out of scope...\n";
+    } // Now shared1 is destroyed → book finally deleted
+
+    std::cout << "\n=== End of Program ===\n";
+    return 0;
+}
+// g++ -std=c++2b smartPointers.cpp -o smartPointers
+\end{Verbatim}
+
+\subsection*{Sample Output}
+\begin{tcolorbox}[colback=black!5!white,colframe=black!75!white]
+Sample output here...
+\end{tcolorbox}
+\newpage
+
+\section*{Shared Pointer Reference Counting}
+\addcontentsline{toc}{section}{Shared Pointer Reference Counting}
+
+\subsection*{Code}
+\begin{Verbatim}[fontsize=\small,frame=single]
+// shared_ptr.cpp
+#include <iostream>
+#include <memory>
+
+using namespace std;
+
+class MyClass {
+public:
+    MyClass() { cout << "Constructor\n"; }
+    ~MyClass() { cout << "Destructor\n"; }
+};
+
+int main() {
+    shared_ptr<MyClass> p1 = make_shared<MyClass>();
+    cout << "p1 use count: " << p1.use_count() << endl;
+
+    shared_ptr<MyClass> p2 = p1;
+    cout << "p2 use count: " << p2.use_count() << endl;
+
+    {
+        shared_ptr<MyClass> p3 = p2;
+        cout << "p3 use count: " << p3.use_count() << endl;
+    }
+
+    cout << "After p3 scope, p1 use count: " << p1.use_count() << endl;
+
+    p2.reset();
+    cout << "After p2.reset(), p1 use count: " << p1.use_count() << endl;
+
+    p1.reset();
+    cout << "After p1.reset(), p1 use count: " << p1.use_count() << endl;
+
+    cout << "End of main\n";
+    return 0;
+}
+// g++ -std=c++11 -o shared_ptr shared_ptr.cpp
+// ./shared_ptr
+\end{Verbatim}
+
+\subsection*{Sample Output}
+\begin{tcolorbox}[colback=black!5!white,colframe=black!75!white]
+Sample output here...
+\end{tcolorbox}
+\newpage
+
+\section*{Shared Pointer Circular Reference}
+\addcontentsline{toc}{section}{Shared Pointer Circular Reference}
+
+\subsection*{Code}
+\begin{Verbatim}[fontsize=\small,frame=single]
+// shared_ptr1.cpp
+#include <iostream>
+#include <memory>  // for shared_ptr
+#include <string>
+
+using namespace std;
+
+class Person {
+private:
+    string m_name;
+    shared_ptr<Person> m_partner;  // initially created empty
+
+public:
+    Person(const string& name) : m_name(name) {
+        cout << m_name << " created\n";
+    }
+
+    ~Person() {
+        cout << m_name << " destroyed\n";
+    }
+
+    friend bool partnerUp(shared_ptr<Person>& p1, shared_ptr<Person>& p2) {
+        if (!p1 || !p2)
+            return false;
+
+        p1->m_partner = p2;
+        p2->m_partner = p1;
+
+        cout << p1->m_name << " is now partnered with " << p2->m_name << '\n';
+        return true;
+    }
+};
+
+void testSharedPtrCouple()
+{
+    auto lucy = make_shared<Person>("Lucy");
+    auto ricky = make_shared<Person>("Ricky");
+
+    partnerUp(lucy, ricky);  // Mutual ownership
+
+    cout << "Lucy use_count: " << lucy.use_count() << endl;   // Likely 2
+    cout << "Ricky use_count: " << ricky.use_count() << endl; // Likely 2
+}
+
+int main()
+{
+    testSharedPtrCouple();
+    cout << "End of main\n";
+    return 0;
+}
+// g++ -std=c++14  shared_ptr_circular.cpp -o shared_ptr_circular
+\end{Verbatim}
+
+\subsection*{Sample Output}
+\begin{tcolorbox}[colback=black!5!white,colframe=black!75!white]
+Sample output here...
+\end{tcolorbox}
+\newpage
+
+\section*{Breaking Cycles with weak_ptr}
+\addcontentsline{toc}{section}{Breaking Cycles with weak_ptr}
+
+\subsection*{Code}
+\begin{Verbatim}[fontsize=\small,frame=single]
+#include <iostream>
+#include <memory>
+using namespace std;
+
+class Person {
+private:
+    string m_name;
+    weak_ptr<Person> m_partner;  // initially created empty
+
+public:
+    Person(const string& name) : m_name(name) {
+        cout << m_name << " created\n";
+    }
+
+    ~Person() {
+        cout << m_name << " destroyed\n";
+    }
+
+    friend bool partnerUp(shared_ptr<Person>& p1, shared_ptr<Person>& p2) {
+        if (!p1 || !p2)
+            return false;
+
+        p1->m_partner = p2;
+        p2->m_partner = p1;
+
+        cout << p1->m_name << " is now partnered with " << p2->m_name << '\n';
+        return true;
+    }
+};
+void testSharedPtrCouple()
+{
+    auto lucy = make_shared<Person>("Lucy");
+    auto ricky = make_shared<Person>("Ricky");
+
+    partnerUp(lucy, ricky);  // Mutual ownership
+
+    cout << "Lucy use_count: " << lucy.use_count() << endl;   // Likely 2
+    cout << "Ricky use_count: " << ricky.use_count() << endl; // Likely 2
+}
+
+int main()
+{
+    testSharedPtrCouple();
+    cout << "End of main\n";
+    return 0;
+}
+// g++ -std=c++14  shared_ptr_weak_circular.cpp -o shared_ptr_weak_circular
+
+// ✅ If two objects mutually reference each other with a **weak_ptr**, here’s what happens:
+// 📌 Key properties of std::weak_ptr:
+
+//     It does not increase the reference count.
+
+//     It’s a non-owning observer.
+
+//     It becomes useful only if there's at least one std::shared_ptr keeping the object alive.
+
+
+// ✅ Why this works:
+
+//     The only owners are a and b — both are shared_ptrs in main.
+
+//     a->bptr and b->aptr are weak_ptrs — they don’t increase use_count().
+
+//     So when a and b go out of scope, both objects are properly destroyed — no circular dependency.
+
+// ==============================================
+// #include <iostream>
+// #include <memory>
+// using namespace std;
+
+// class B; // Forward declaration
+
+// class A {
+// public:
+//     weak_ptr<B> bptr;  // weak reference to B
+//     ~A() { cout << "A destroyed\n"; }
+// };
+
+// class B {
+// public:
+//     weak_ptr<A> aptr;  // weak reference to A
+//     ~B() { cout << "B destroyed\n"; }
+// };
+
+// int main() {
+//     shared_ptr<A> a = make_shared<A>();
+//     shared_ptr<B> b = make_shared<B>();
+
+//     a->bptr = b;  // no ownership added
+//     b->aptr = a;  // no ownership added
+
+//     cout << "a use_count: " << a.use_count() << endl;  // 1
+//     cout << "b use_count: " << b.use_count() << endl;  // 1
+// }
+\end{Verbatim}
+
+\subsection*{Sample Output}
+\begin{tcolorbox}[colback=black!5!white,colframe=black!75!white]
+Sample output here...
+\end{tcolorbox}
+\newpage
+
+\section*{Accessing Partner via weak_ptr.lock()}
+\addcontentsline{toc}{section}{Accessing Partner via weak_ptr.lock()}
+
+\subsection*{Code}
+\begin{Verbatim}[fontsize=\small,frame=single]
+// weak_to_share.cpp
+#include <iostream>
+#include <memory>     // for shared_ptr and weak_ptr
+#include <string>
+using namespace std;
+
+class Person {
+private:
+    string m_name;
+    weak_ptr<Person> m_partner;  // note: This is now a weak_ptr
+
+public:
+    Person(const string &name) : m_name(name) {
+        cout << m_name << " created\n";
+    }
+
+    ~Person() {
+        cout << m_name << " destroyed\n";
+    }
+
+    friend bool partnerUp(shared_ptr<Person> &p1, shared_ptr<Person> &p2) {
+        if (!p1 || !p2)
+            return false;
+
+        p1->m_partner = p2;
+        p2->m_partner = p1;
+
+        cout << p1->m_name << " is now partnered with " << p2->m_name << '\n';
+        return true;
+    }
+
+    // use lock() to convert weak_ptr to shared_ptr
+    const shared_ptr<Person> getPartner() const {
+        return m_partner.lock();
+    }
+
+    const string &getName() const {
+        return m_name;
+    }
+};
+
+int main() {
+    auto lucy{make_shared<Person>("Lucy")};
+    auto ricky{make_shared<Person>("Ricky")};
+
+    partnerUp(lucy, ricky);
+
+    auto partner = ricky->getPartner();  // get shared_ptr to Ricky's partner
+    cout << ricky->getName() << "'s partner is: " << partner->getName() << '\n';
+
+    return 0;
+}
+// g++ -std=c++14  weak_to_share.cpp -o weak_to_share
+\end{Verbatim}
+
+\subsection*{Sample Output}
+\begin{tcolorbox}[colback=black!5!white,colframe=black!75!white]
+Sample output here...
+\end{tcolorbox}
+\newpage
+\end{document}

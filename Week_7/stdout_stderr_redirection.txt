@@ -1,0 +1,55 @@
+Understanding stdout, stderr, and Redirection in Unix/Linux
+============================================================
+
+In Unix-like systems, every process has three default file descriptors:
+
+File Descriptors:
+-----------------
+| Descriptor | Stream Name    | Abbreviation | Used For                    |
+|------------|----------------|--------------|-----------------------------|
+| 0          | stdin          | Standard Input  | Reading input             |
+| 1          | stdout         | Standard Output | Regular output (e.g., cout) |
+| 2          | stderr         | Standard Error  | Error output (e.g., cerr)   |
+
+Redirection:
+------------
+
+1. Redirect stdout using `>`:
+   Example:
+       ./program > output.txt
+   - Redirects standard output (cout) to `output.txt`
+   - Does NOT include error messages (cerr)
+
+2. Redirect stderr using `2>`:
+   Example:
+       ./program 2> errors.txt
+   - Redirects standard error (cerr) to `errors.txt`
+   - Standard output still goes to the console
+
+3. Redirect both stdout and stderr:
+   Example:
+       ./program > output.txt 2>&1
+   - Redirects both standard output and error to `output.txt`
+
+Clarification:
+--------------
+
+The number `2` in `2>` is NOT a file or an argument. It refers to file descriptor 2, which is stderr.
+This is shell syntax (used in bash, zsh, etc.) for output redirection.
+
+Example Test Program:
+---------------------
+#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "This is cout" << endl;
+    cerr << "This is cerr" << endl;
+    return 0;
+}
+
+Run it like:
+    ./a.out > out.txt 2> err.txt
+
+- out.txt will contain: This is cout
+- err.txt will contain: This is cerr

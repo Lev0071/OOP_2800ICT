@@ -1,0 +1,66 @@
+C++ Standard Exceptions – Summary Guide
+=======================================
+
+All standard C++ exceptions are derived from:
+
+    std::exception
+
+They are divided into two main categories:
+
+1. std::logic_error
+2. std::runtime_error
+
+---------------------------------------
+1. std::logic_error Branch
+---------------------------------------
+
+- invalid_argument
+  > Thrown when a function receives bad input.
+  > Example: throw invalid_argument("Negative number not allowed.");
+
+- out_of_range
+  > Thrown when accessing outside a valid container range.
+  > Example: throw out_of_range("Index exceeds array size.");
+
+- domain_error
+  > Thrown when input is outside the valid mathematical domain.
+  > Example: throw domain_error("Square root of negative number.");
+
+- length_error
+  > Thrown when a container exceeds its maximum size.
+  > Example: throw length_error("String too long.");
+
+---------------------------------------
+2. std::runtime_error Branch
+---------------------------------------
+
+- runtime_error
+  > Generic runtime failure not caught at compile time.
+  > Example: throw runtime_error("Database connection failed.");
+
+- range_error
+  > Thrown when a value is out of representable range.
+  > Example: throw range_error("Value too large for float.");
+
+- overflow_error
+  > Thrown when a calculation exceeds the max representable value.
+  > Example: throw overflow_error("Integer overflow.");
+
+- underflow_error
+  > Thrown when a result is too close to zero to be represented.
+  > Example: throw underflow_error("Floating-point underflow.");
+
+---------------------------------------
+Quick Summary Table
+---------------------------------------
+
+| Exception Type       | Category       | When It Happens                            |
+|----------------------|----------------|---------------------------------------------|
+| invalid_argument     | logic_error     | Bad input (e.g., empty string)              |
+| out_of_range         | logic_error     | Index too big for vector                    |
+| domain_error         | logic_error     | sqrt(-1), log(-5)                           |
+| length_error         | logic_error     | Trying to resize a container too large      |
+| runtime_error        | runtime_error   | General runtime failure                     |
+| range_error          | runtime_error   | Value too large to represent                |
+| overflow_error       | runtime_error   | Arithmetic overflow                         |
+| underflow_error      | runtime_error   | Arithmetic underflow                        |

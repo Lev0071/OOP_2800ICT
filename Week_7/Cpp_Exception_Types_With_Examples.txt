@@ -1,0 +1,88 @@
+C++ Standard Exceptions – Summary with Examples
+===============================================
+
+All standard C++ exceptions are derived from:
+
+    std::exception
+
+They are divided into two main categories:
+
+1. std::logic_error
+2. std::runtime_error
+
+---------------------------------------
+1. std::logic_error Branch
+---------------------------------------
+
+- invalid_argument
+  > Thrown when a function receives bad input.
+  > Example:
+    void setAge(int age) {
+        if (age < 0) throw invalid_argument("Age cannot be negative.");
+    }
+
+- out_of_range
+  > Thrown when accessing outside a valid container range.
+  > Example:
+    vector<int> v = {1, 2, 3};
+    int x = v.at(10); // throws out_of_range
+
+- domain_error
+  > Thrown when input is outside the valid mathematical domain.
+  > Example:
+    double safeSqrt(double x) {
+        if (x < 0) throw domain_error("Negative input not allowed.");
+        return sqrt(x);
+    }
+
+- length_error
+  > Thrown when a container exceeds its maximum size.
+  > Example:
+    string s;
+    s.reserve(s.max_size() + 1); // throws length_error
+
+---------------------------------------
+2. std::runtime_error Branch
+---------------------------------------
+
+- runtime_error
+  > Generic runtime failure not caught at compile time.
+  > Example:
+    void connectToDatabase(bool ok) {
+        if (!ok) throw runtime_error("Database connection failed.");
+    }
+
+- range_error
+  > Thrown when a value is out of representable range.
+  > Example:
+    throw range_error("Range error due to large value conversion.");
+
+- overflow_error
+  > Thrown when a calculation exceeds the max representable value.
+  > Example:
+    int multiply(int a, int b) {
+        if (a > INT_MAX / b) throw overflow_error("Integer overflow!");
+        return a * b;
+    }
+
+- underflow_error
+  > Thrown when a result is too close to zero to be represented.
+  > Example:
+    double verySmall = 1e-308;
+    double result = verySmall / 1e308;
+    if (result == 0) throw underflow_error("Underflow occurred.");
+
+---------------------------------------
+Quick Summary Table
+---------------------------------------
+
+| Exception Type       | Category       | When It Happens                            |
+|----------------------|----------------|---------------------------------------------|
+| invalid_argument     | logic_error     | Bad input (e.g., empty string)              |
+| out_of_range         | logic_error     | Index too big for vector                    |
+| domain_error         | logic_error     | sqrt(-1), log(-5)                           |
+| length_error         | logic_error     | Trying to resize a container too large      |
+| runtime_error        | runtime_error   | General runtime failure                     |
+| range_error          | runtime_error   | Value too large to represent                |
+| overflow_error       | runtime_error   | Arithmetic overflow                         |
+| underflow_error      | runtime_error   | Arithmetic underflow                        |
