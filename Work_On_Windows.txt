@@ -1,0 +1,15 @@
+git config --global user.name "Lev0071"
+git config --global user.email "coder0071@outlook.com"
+git config --global credential.helper manager
+
+CMDER
+wsl --install -d Ubuntu
+wsl --update // if needed
+
+in start menu: "Ubuntu",open it
+
+cd ~
+git clone https://github.com/Lev0071/OOP_2800ICT.git
+cd OOP_2800ICT
+
+cp -r ~/OOP_2800ICT /mnt/c/Users/s2921450/Desktop/
