@@ -2,12 +2,12 @@ void SkipList::insertElement(int key) {
     auto current = header;
     vector<shared_ptr<Node>> update(MAXLVL + 1, nullptr);
 
-    for (int i = level; i >= 0; i--) {
+    for (int i = level; i >= 0; i--) { // <--*
         while (current->forward[i] && current->forward[i]->getKey() < key) {
             current = current->forward[i];
         }
-        update[i] = current;
-    }
+        update[i] = current; // <--*
+    } // <--*
 
     current = current->forward[0];
 

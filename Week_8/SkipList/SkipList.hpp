@@ -14,6 +14,7 @@ public:
     void deleteElement(int);
     void displayList();
     int randomLevel();
+    void printAscii() const;
 
     ~SkipList();
 };
