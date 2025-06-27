@@ -1,0 +1,37 @@
+My answers to the questions are below, let me know if there are mistakes fdo not give answers for free.
+
+L2: Hd ──────────────────> 31 ───────────────────> 69  
+L1: Hd ──────────────────> 31 ───────────────────> 69  
+L0: Hd ─> 5 ─> 25 ─> 30 ─> 31 ─> 42 ─> 58 ─> 62 ─> 69
+
+❓ Questions:
+1.Which nodes would you traverse at each level to find the position for key 45?
+(List the key values of the nodes you visit at each level.)
+
+Starting at head node level2
+L2:forward to node 31,down
+L1:down
+L0:forward to node 42.
+
+2.What are the values in the update[] array after traversal?
+(i.e., the last node visited at each level before dropping down or inserting.)
+
+update[2] = 31
+update[1] = 31
+update[0] = 42
+
+3.Where should the new node 45 be inserted at:
+
+Level 0?
+
+Level 1?
+
+Level 2?
+
+Node 45 will cover levels 0,1 and 2
+
+4.After inserting 45, show the new ASCII structure.
+
+L2: Hd ──────────────────> 31 ───────> 45 ─────────────> 69  
+L1: Hd ──────────────────> 31 ───────> 45 ─────────────> 69  
+L0: Hd ─> 5 ─> 25 ─> 30 ─> 31 ─> 42 ─> 45 ─> 58 ─> 62 ─> 69
