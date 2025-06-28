@@ -3,7 +3,7 @@
 int main(){
 
     //########## TEST ##########
-    SkipList list(2, 0.5f);
+    SkipList list(6, 0.5f);
 
     cout << "Skip list built:\n";
     list.printAscii();
@@ -18,6 +18,8 @@ int main(){
     list.insertElementFixedLevel(62, 0);
     list.insertElementFixedLevel(69, 2);  // appears at L2, L1, L0
 
+    cout << "Before last insert:\n";
+    list.printAscii();
     list.insertElementFixedLevel_2(45);
 
     cout << "Skip list populated:\n";

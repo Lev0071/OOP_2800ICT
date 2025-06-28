@@ -28,12 +28,12 @@ void SkipList::insertElement(int key) {
     auto current = header;
     vector<shared_ptr<Node>> update(MAXLVL + 1, nullptr);
 
-    for (int i = level; i >= 0; i--) { // <--*
+    for (int i = level; i >= 0; i--) {
         while (current->forward[i] && current->forward[i]->getKey() < key) {
             current = current->forward[i];
         }
-        update[i] = current; // <--*
-    } // <--*
+        update[i] = current;
+    }
 
     current = current->forward[0];
 
@@ -56,6 +56,7 @@ void SkipList::insertElement(int key) {
         cout << "Successfully Inserted key " << key << "\n";
     }
 }
+
 
 void SkipList::printAscii() const {
     for (int i = level; i >= 0; i--) {
@@ -113,17 +114,28 @@ void SkipList::insertElementFixedLevel_2(int key) {
     auto current = header;
     vector<shared_ptr<Node>> update(MAXLVL + 1, nullptr);
 
-    for (int i = level; i >= 0; i--) { // <--*
+       for (int i = level; i >= 0; i--) { // <--*
         while (current->forward[i] && current->forward[i]->getKey() < key) {
             current = current->forward[i];
         }
         update[i] = current; // <--*
+        //DEBUG ===============================================
+        cout << "DEBUG - UPDATE ++++++++++++++++++ START\n";
+        cout << "[debug] update[" << i << "] = ";
+        if (update[i]) {
+            cout << update[i]->getKey();
+        } else {
+            cout << "nullptr";
+        }
+        cout << "\nDEBUG - UPDATE ++++++++++++++++++ END";
+        cout << "\n";
+        //DEBUG ===============================================
     } // <--*
 
     current = current->forward[0];
 
     if (!current || current->getKey() != key) {
-        int rlevel = 2;
+        int rlevel = 5;
 
         if (rlevel > level) {
             for (int i = level + 1; i <= rlevel; i++) {
@@ -141,3 +153,46 @@ void SkipList::insertElementFixedLevel_2(int key) {
         cout << "Successfully Inserted key " << key << "\n";
     }
 }
+
+bool SkipList::searchElement(int key) {
+    auto current = header;
+
+    for (int i = level; i >= 0; i--) {
+        while (current->forward[i] && current->forward[i]->getKey() < key) {
+            current = current->forward[i];
+        }
+    }
+
+    current = current->forward[0];
+    return current && current->getKey() == key;
+}
+
+void SkipList::deleteElement(int key) {
+    auto current = header;
+    vector<shared_ptr<Node>> update(MAXLVL + 1, nullptr);
+
+    for (int i = level; i >= 0; i--) {
+        while (current->forward[i] && current->forward[i]->getKey() < key) {
+            current = current->forward[i];
+        }
+        update[i] = current;
+    }
+
+    current = current->forward[0];
+
+    if (current && current->getKey() == key) {
+        for (int i = 0; i <= level; i++) {
+            if (update[i]->forward[i] != current)
+                break;
+            update[i]->forward[i] = current->forward[i];
+        }
+
+        while (level > 0 && !header->forward[level]) {
+            level--;
+        }
+
+        cout << "Successfully deleted key " << key << "\n";
+    }
+}
+
+
