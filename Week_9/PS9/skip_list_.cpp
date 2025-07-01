@@ -26,7 +26,7 @@ public:
 
     ~Node()
     {
-        cout << "Node(key: " << key << " ,value: " << value << " destroyed.\n";
+        cout << "Node(key: " << key << " ,value: " << value << ")"<< " destroyed.\n";
     }
 };
 
@@ -41,10 +41,10 @@ private:
 
 public:
     SkipList(int, float);
-    bool searchElement(T);
+    U searchElement (T) const;
     void insertElement(T);
     bool deleteElement(T);
-    void displayList();
+    void displayList const;
     int randomLevel();
     ~SkipList()
     {
@@ -73,8 +73,7 @@ int SkipList<T, U>::randomLevel()
 }
 
 template<typename T, typename U>
-bool SkipList<T, U>::searchElement(T key)
-{
+U SkipList<T, U>::searchElement  (T key) const{
     auto current = header;
     cout << "Search Path:" << endl;
     for (int i = level; i >= 0; i--)
@@ -86,7 +85,7 @@ bool SkipList<T, U>::searchElement(T key)
     }
     current = current->forward[0];
 
-    return current && current->getKey() == key;
+    return (current && current->getKey() == key)? current->getValue():"NOT FOUND";
 }
 
 template<typename T, typename U>
@@ -157,7 +156,33 @@ bool SkipList<T, U>::deleteElement(T key)
     return false;
 }
 
+void SkipList<T, U>::displayList() const {
+    for (int i = level; i >= 0; i--) {
+        auto node = header;
+        cout << "L" << i << ": ";
+        while (node) {
+            if (node == header)
+                cout << "Hd";
+            else
+                cout << "-> (K: " << node->getKey() << " : V: " << node->getValue();
+            if (node->forward[i])
+                cout << " ── ";
+            node = node->forward[i];
+        }
+        cout << "\n";
+    }
+}
 
+class LogSystem{
+    private:
+        SkipList<int,string> logs;
+
+    public:
+        void insert(int timestamp,const string& message){logs.insertElement(timestamp,message);}
+        string search(int timestamp){ return logs.searchElement(timestamp); }
+        bool remove(int timestamp){ return logs.deleteElement(timestamp); }
+        void display(){logs.displayList();}
+};
 
 
 int main()
@@ -171,6 +196,8 @@ int main()
 
     cout << "Search 1620000012: " << logSys.search(1620000012) << "\n";
     cout << "Search 1620000999: " << logSys.search(1620000999) << "\n";
+    cout << "Search 1620000020: " << logSys.search(1620000999) << "\n";
+
 
     logSys.display();
 
@@ -180,4 +207,4 @@ int main()
     return 0;
 }
 
-// g++ -std=c++17 PS8.cpp -o PS8
+// g++ -std=c++17 skip_list_.cpp -o PS9
