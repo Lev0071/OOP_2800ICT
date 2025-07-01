@@ -228,19 +228,26 @@ int main()
 
     shared_ptr<TreapNode<int>> t = nullptr;
 
-    vector<int> keys{5, 3, 1, 4, 2, 9, 7, 8, 6, 0, 10, 11};
-    t = t->build(keys, 0, keys.size() - 1);
+    vector<pair<int, int>> keys = {
+        {5, 90}, {3, 70}, {1, 50}, {4, 60},
+        {2, 55}, {9, 85}, {7, 65}, {8, 75},
+        {6, 60}, {0, 45}, {10, 80}, {11, 70}
+    };
+
+    for (const auto& [key, priority] : keys) {
+    t->insert(t, key, priority);
+}
 
     t->print_treap_2D(t);
     cout << endl;
 
     cout << "Inserting 20" << endl;
-    t->insert(t, 20);
+    t->insert(t, 20, 95);
     t->print_treap_2D(t);
     cout << endl;
 
     cout << "Inserting 15" << endl;
-    t->insert(t, 15);
+    t->insert(t, 15, 78);
     t->print_treap_2D(t);
     cout << endl;
 
