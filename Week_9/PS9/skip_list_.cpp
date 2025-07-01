@@ -42,9 +42,9 @@ private:
 public:
     SkipList(int, float);
     U searchElement (T) const;
-    void insertElement(T);
+    void insertElement(T,U);
     bool deleteElement(T);
-    void displayList const;
+    void displayList() const;
     int randomLevel();
     ~SkipList()
     {
@@ -156,6 +156,7 @@ bool SkipList<T, U>::deleteElement(T key)
     return false;
 }
 
+template<typename T, typename U>
 void SkipList<T, U>::displayList() const {
     for (int i = level; i >= 0; i--) {
         auto node = header;
@@ -175,9 +176,11 @@ void SkipList<T, U>::displayList() const {
 
 class LogSystem{
     private:
-        SkipList<int,string> logs;
+        //SkipList<int,string> logs; 
+        SkipList<int,string> logs{6, 0.5};
 
     public:
+        //LogSystem() : logs(6, 0.5) {}
         void insert(int timestamp,const string& message){logs.insertElement(timestamp,message);}
         string search(int timestamp){ return logs.searchElement(timestamp); }
         bool remove(int timestamp){ return logs.deleteElement(timestamp); }
