@@ -280,50 +280,45 @@ int main()
     shared_ptr<TreapNode<int>> t = nullptr;
 
     vector<pair<int, int>> keys = {
-    {5, 86},{2, 56},{0, 21},{1, 13},
-    {3, 53},{4, 9},{8, 70},{6, 60},
-    {7, 17},{10, 50},{9, 42},{11, 18}
+        {5, 90}, {3, 70}, {1, 50}, {4, 60},
+        {2, 55}, {9, 85}, {7, 65}, {8, 75},
+        {6, 60}, {0, 45}, {10, 80}, {11, 70}
     };
 
     for (const auto& [key, priority] : keys) {
     t->insert(t, key, priority);
 }
-    cout << "START -- Main Tree\n";
+
     t->print_treap_2D(t);
-    cout << "END -- Main Tree";
     cout << endl;
 
-    cout << "\nPreorder Traversal:\n";
-    t->preorder(t);
+    cout << "Inserting 20" << endl;
+    t->insert(t, 20, 95);
+    t->print_treap_2D(t);
     cout << endl;
 
-    // cout << "Inserting 20" << endl;
-    // t->insert(t, 11, 18);
-    // t->print_treap_2D(t);
-    // cout << endl;
+    cout << "Inserting 15" << endl;
+    t->insert(t, 15, 78);
+    t->print_treap_2D(t);
+    cout << endl;
 
-    // cout << "Inserting 15" << endl;
-    // t->insert(t, 9, 42);
-    // t->print_treap_2D(t);
-    // cout << endl;
+    cout << "Removing 5" << endl;
+    t->remove(t, 5);
+    t->print_treap_2D(t);
+    cout << endl;
 
-    // cout << "Removing 5" << endl;
-    // t->remove(t, 5);
-    // t->print_treap_2D(t);
-    // cout << endl;
-
-    // cout << "Searching for 10" << endl;
-    // auto found = t->search(t, 10);
-    // if (found)
-    // {
-    //     cout << "Found: " << found->getKey() << "(" << found->getPriority() << ")" << endl;
-    // }
-    // else
-    // {
-    //     cout << "Not found!" << endl;
-    // }
+    cout << "Searching for 10" << endl;
+    auto found = t->search(t, 10);
+    if (found)
+    {
+        cout << "Found: " << found->getKey() << "(" << found->getPriority() << ")" << endl;
+    }
+    else
+    {
+        cout << "Not found!" << endl;
+    }
 
     return 0;
 }
-// g++ -std=c++17  PS10_trace.cpp -o PS10_trace
+// g++ -std=c++17  PS10_trace_2.cpp -o PS10_trace_2
 // chcp 65001
