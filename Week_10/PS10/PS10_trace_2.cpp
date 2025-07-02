@@ -289,23 +289,68 @@ int main()
     t->insert(t, key, priority);
 }
 
+//----------PRINT -- START --------------
+cout << "BASE CASE TREE\n";
+    cout << "START -- Main Tree\n";
     t->print_treap_2D(t);
+    cout << "END -- Main Tree";
     cout << endl;
+
+    cout << "\nPreorder Traversal:\n";
+    t->preorder(t);
+    cout << endl;
+//----------PRINT -- END --------------
 
     cout << "Inserting 20" << endl;
     t->insert(t, 20, 95);
     t->print_treap_2D(t);
     cout << endl;
 
+//----------PRINT -- START --------------
+cout << "INSERTED - 20\n";
+    cout << "START -- Main Tree\n";
+    t->print_treap_2D(t);
+    cout << "END -- Main Tree";
+    cout << endl;
+
+    cout << "\nPreorder Traversal:\n";
+    t->preorder(t);
+    cout << endl;
+//----------PRINT -- END --------------
+
     cout << "Inserting 15" << endl;
     t->insert(t, 15, 78);
     t->print_treap_2D(t);
     cout << endl;
 
+//----------PRINT -- START --------------
+cout << "INSERTED - 15\n";
+    cout << "START -- Main Tree\n";
+    t->print_treap_2D(t);
+    cout << "END -- Main Tree";
+    cout << endl;
+
+    cout << "\nPreorder Traversal:\n";
+    t->preorder(t);
+    cout << endl;
+//----------PRINT -- END --------------
+
     cout << "Removing 5" << endl;
     t->remove(t, 5);
     t->print_treap_2D(t);
     cout << endl;
+
+//----------PRINT -- START --------------
+cout << "REMOVED - 5\n";
+    cout << "START -- Main Tree\n";
+    t->print_treap_2D(t);
+    cout << "END -- Main Tree";
+    cout << endl;
+
+    cout << "\nPreorder Traversal:\n";
+    t->preorder(t);
+    cout << endl;
+//----------PRINT -- END --------------
 
     cout << "Searching for 10" << endl;
     auto found = t->search(t, 10);
@@ -322,3 +367,4 @@ int main()
 }
 // g++ -std=c++17  PS10_trace_2.cpp -o PS10_trace_2
 // chcp 65001
+
