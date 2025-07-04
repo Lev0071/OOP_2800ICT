@@ -265,7 +265,7 @@ public:
 
 
     void preorder(shared_ptr<TreapNode<T>> root) {
-        if (!root) return;
+        if (!root) return; 
         cout << root->key << "(" << root->priority << ") ";
         preorder(root->left);
         preorder(root->right);

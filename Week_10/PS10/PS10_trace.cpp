@@ -247,20 +247,25 @@ public:
         return 1 + max(height(node->left), height(node->right));
     }
 
-    void print_treap_2D(shared_ptr<TreapNode<T>> node, string prefix = "", bool isLeft = true) {
+    void print_treap_2D() {
+
+    }
+        void print_treap_2D(shared_ptr<TreapNode<T>> node, string prefix = "", bool isLeft = true) {
         if (node == nullptr) return;
 
         if (node->right) {
-            print_treap_2D(node->right, prefix + (isLeft ? "│   " : "    "), false);
+            print_treap_2D(node->right, prefix + (isLeft ? "│•••" : "••••"), false);
         }
 
         cout << prefix;
         cout << (isLeft ? "└── " : "┌── ");
         cout << node->key << "(" << node->priority << ")" << endl;
+        
 
         if (node->left) {
-            print_treap_2D(node->left, prefix + (isLeft ? "    " : "│   "), true);
+            print_treap_2D(node->left, prefix + (isLeft ? "••••" : "│•••"), true);
         }
+        //exit(0);
     }
 
 
@@ -289,7 +294,8 @@ int main()
     t->insert(t, key, priority);
 }
     cout << "START -- Main Tree\n";
-    t->print_treap_2D(t);
+    //t->print_treap_2D(t);
+    t->print_treap_2D(t,"",false);
     cout << "END -- Main Tree";
     cout << endl;
 
