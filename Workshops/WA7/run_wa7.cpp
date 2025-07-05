@@ -1,5 +1,10 @@
 #include <iostream>
 
+#include <iomanip>
+#include "Student.hpp"
+#include "StudentManager.hpp"
+#include "NoGradesException.hpp"
+
 // class NoGradesException; // Forward declaration
 // class Student; // Forward declaration
 // class StudentManager; // Forward declaration
@@ -75,3 +80,5 @@ int main()
 // ---------- WARNING: Do not modify the main function! ----------
 // ---------- WARNING: Do not modify the main function! ----------
 // ---------- WARNING: Do not modify the main function! ----------
+
+// g++ -std=c++17  run_wa7.cpp -o WA7
