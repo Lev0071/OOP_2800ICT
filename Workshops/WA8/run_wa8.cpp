@@ -6,6 +6,13 @@
 #include <iomanip>  // Added for std::fixed and std::setprecision
 
 using namespace std;
+// //---------------------------------------------------------------
+// vector<vector<int>> A(m, vector<int>(n));
+
+// // Get dimensions
+// size_t rows = A.size();       // m
+// size_t cols = A[0].size();    // n
+// //---------------------------------------------------------------
 
 void fillRandom(vector<vector<int>>& mat, int maxVal = 999);
 
