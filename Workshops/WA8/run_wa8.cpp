@@ -9,10 +9,14 @@ using namespace std;
 
 void fillRandom(vector<vector<int>>& mat, int maxVal = 999);
 
-
-
-
-
+void matrixProduct(const vector<vector<int>>& A, const vector<vector<int>>& B, vector<vector<int>>& C,size_t startRow, size_t endRow){
+    size_t n = A[0].size();  // Columns of A
+    size_t p = B[0].size();  // Columns of B
+    for (i = startRow; i < endRow; ++i)
+        for (j = 0; j < p; ++j)
+            for (k = 0; k < n; ++k)
+                C[i][j] += A[i][k] * B[k][j];
+}
 
 // ================ Note: Do not modify the code provided below. ================
 int main() {
@@ -69,4 +73,40 @@ void fillRandom(vector<vector<int>>& mat, int maxVal) {
 
 // ================ Note: Do not modify the code provided above. ================
 
+// EXPLANATION
+// For matrix multiplication, since [A(m×n)] × [B(n×p)] = C(m×p) iff n == n → true,
+// then instead of dividing the mandatory dimension (which is n) by the number of threads, I should divide the output rows dimension (which is m) by the number of threads to get the chunk size.
+// This way, each thread works on its chunk-size amount of rows in the output matrix C.
+// Each chunk is calculated independently and combined together naturally, since the rows don’t overlap.
+
+// We will try to adapt:
+// size_t chunkSize = m / numThreads;
+
+// for (int i = 0; i < numThreads; ++i) {
+//     size_t startRow = i * chunkSize;
+//     size_t endRow = (i == numThreads - 1) ? m : startRow + chunkSize;
+
+//     // Launch thread to do rows [startRow, endRow)
+// }
+
+// with:
+
+//     for (int i = 0; i < m; ++i) { // over rows of C (rows of A)
+//         for (int j = 0; j < p; ++j) { // over cols of C (cols of B)
+//             for (int k = 0; k < n; ++k) { // over shared dimension (A cols / B rows)
+//                 C[i][j] += A[i][k] * B[k][j];
+//             }
+//         }
+//     }
+// In single-threaded: i = 0 to m
+
+// In multi-threaded: each thread gets its own slice of rows
+// startRow = i * chunkSize
+// endRow   = ... (next boundary or m)
+
+// for (int i = startRow; i < endRow; ++i) {
+//   ...
+// }
+
 // g++ -std=c++17 run_wa8.cpp -o wa8 -pthread
+
