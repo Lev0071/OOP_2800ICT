@@ -48,6 +48,8 @@ public:
         y->right = x;
 
         x = y;
+        updateMetadata(x->right); // old root, now right child
+        updateMetadata(x);        // new root
     }
 
     void left_rotation(shared_ptr<TreapNode<T>> &y)
