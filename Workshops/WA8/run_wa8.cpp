@@ -16,13 +16,43 @@ using namespace std;
 
 void fillRandom(vector<vector<int>>& mat, int maxVal = 999);
 
-void matrixProduct(const vector<vector<int>>& A, const vector<vector<int>>& B, vector<vector<int>>& C,size_t startRow, size_t endRow){
+void matrixProduct(const vector<vector<int>>& A, const vector<vector<int>>& B, vector<vector<int>>& C,size_t startRow, size_t endRow) 
+{
     size_t n = A[0].size();  // Columns of A
     size_t p = B[0].size();  // Columns of B
-    for (i = startRow; i < endRow; ++i)
-        for (j = 0; j < p; ++j)
-            for (k = 0; k < n; ++k)
-                C[i][j] += A[i][k] * B[k][j];
+
+    size_t q = B.size();  // Rows of B
+
+    if(n!=q){
+        cout << "Matrices violate requirements for matrix multiplication" << endl;
+        cout << "Column of first matrix: " << n << endl;
+        cout << "Row of second matrix: " << q << endl;
+        return;
+    }else{
+        for (size_t i = startRow; i < endRow; ++i)
+            for (size_t j = 0; j < p; ++j)
+                for (size_t k = 0; k < n; ++k)
+                    C[i][j] += A[i][k] * B[k][j];
+    }
+}
+
+void customOpSingle(const vector<vector<int>>& A,const vector<vector<int>>& B,vector<vector<int>>& C) {
+    matrixProduct(A, B, C, 0, A.size());
+}
+
+void customOpMulti(const vector<vector<int>>& A,const vector<vector<int>>& B,vector<vector<int>>& C,int numThreads) {
+    vector<thread> threads;
+    int m = A.size();
+    size_t chunkSize = m / numThreads;
+
+    for (int i = 0; i < numThreads; ++i) {
+        size_t startRow = i * chunkSize;
+        size_t endRow = (i == numThreads - 1) ? m : startRow + chunkSize;
+
+        threads.emplace_back(matrixProduct, cref(A), cref(B), ref(C), startRow, endRow);
+    }
+
+    for (auto& t : threads) t.join();
 }
 
 // ================ Note: Do not modify the code provided below. ================
@@ -116,4 +146,5 @@ void fillRandom(vector<vector<int>>& mat, int maxVal) {
 // }
 
 // g++ -std=c++17 run_wa8.cpp -o wa8 -pthread
+// g++ -std=c++17  run_wa8.cpp -o wa8
 
