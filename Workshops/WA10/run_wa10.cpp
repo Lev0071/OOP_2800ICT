@@ -13,6 +13,8 @@ class TreapNode
 private:
     T key;
     int priority;
+    int subtreeSum;
+    int subtreeCount;
     shared_ptr<TreapNode<T>> left;
     shared_ptr<TreapNode<T>> right;
 
@@ -334,6 +336,12 @@ public:
         }
     }
 
+    void updateMetadata(shared_ptr<TreapNode<T>> &root){
+        if(root->left){
+            root->
+        }
+    }
+
 };
 
 
@@ -362,3 +370,5 @@ int main()
 // ---------- WARNING: Do not modify the main function! ----------
 // ---------- WARNING: Do not modify the main function! ----------
 // ---------- WARNING: Do not modify the main function! ----------
+
+// g++ -std=c++17  run_wa10.cpp -o wa10
