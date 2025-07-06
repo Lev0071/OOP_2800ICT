@@ -337,8 +337,18 @@ public:
     }
 
     void updateMetadata(shared_ptr<TreapNode<T>> &root){
+        if (!root) return;
+
+        root->subtreeSum = root->key;
+        root->subtreeCount = 0;
+
         if(root->left){
-            root->
+            root->subtreeSum += root->left->subtreeSum;
+            root->subtreeCount  += 1 + root->left->subtreeCount ;
+        }
+        if(root->right){
+            root->subtreeSum += root->right->subtreeSum;
+            root->subtreeCount  += 1 + root->right->subtreeCount ;
         }
     }
 
