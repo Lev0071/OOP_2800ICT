@@ -53,9 +53,9 @@ void SkipList<K, V>::displayList_2() const {
         cout << "L" << i << ": ";
         while (node) {
             if (node == header)
-                cout << "Hd";
+                cout << "Hd" << "-> (K: " << node->getKey() << " : V: " << node->getValue() << ")";
             else
-                cout << "-> (K: " << node->getKey() << " : V: " << node->getValue();
+                cout << "-> (K: " << node->getKey() << " : V: " << node->getValue()<< ")";
             if (node->forward[i])
                 cout << " ── ";
             node = node->forward[i];
@@ -65,7 +65,22 @@ void SkipList<K, V>::displayList_2() const {
 }
 
 template <typename K, typename V>
-vector<pair<K, V>> SkipList<K, V>::rangeQuery(K low, K high) const{return {};}
+vector<pair<K, V>> SkipList<K, V>::rangeQuery(K low, K high) const{
+    vector<pair<K, V>> results;
+    auto current = header;
+    for (int i = level; i >= 0; i--) {
+        while (current->forward[i] && current->forward[i]->getKey() <low) {
+            current = current->forward[i];
+        }
+    }
+    current = current->forward[0];
+    while (current && current->getKey() <=high) {
+            results.emplace_back(current->getKey(),current->getValue());
+            // better than results.push_back(make_pair{current->forward[i]->getKey(),current->forward[i]->getValue()})
+            current = current->forward[0];
+        }
+    return results;
+}
 
 template <typename K, typename V>
 SkipList<K, V>::SkipList(int MAXLVL, float P) : MAXLVL(MAXLVL), P(P), level(0) {
@@ -103,6 +118,7 @@ template <typename K, typename V>
 void SkipList<K, V>::insertElement(K key, V value, int rlevel) {
     auto current = header;
     vector<shared_ptr<Node<K, V>>> update(MAXLVL + 1, nullptr);
+
     for (int i = level; i >= 0; i--) {
         while (current->forward[i] && current->forward[i]->getKey() < key) {
             current = current->forward[i];
@@ -176,37 +192,39 @@ int main() {
     srand(static_cast<unsigned>(time(nullptr)));
 
     SkipList<int, string> skipList;
-    // skipList.insertElement(1, "Banana_0");
-    // skipList.insertElement(5, "Apple");
-    // skipList.insertElement(7, "Apple_1");
-    // skipList.insertElement(10, "Banana_1");
-    // skipList.insertElement(20, "Date");
-    // skipList.insertElement(23, "Elderberry");
-    // skipList.insertElement(15, "Cherry");
-    // skipList.insertElement(25, "Elderberry_1");
-    // skipList.insertElement(30, "Fig");
-    // skipList.insertElement(60, "Fig_1");
+    //skipList.displayList_2();
+    skipList.insertElement(1, "Banana_0");
+    skipList.insertElement(5, "Apple");
+    skipList.insertElement(7, "Apple_1");
+    skipList.insertElement(10, "Banana_1");
+    skipList.insertElement(20, "Date");
+    skipList.insertElement(23, "Elderberry");
+    skipList.insertElement(15, "Cherry");
+    skipList.insertElement(25, "Elderberry_1");
+    skipList.insertElement(30, "Fig");
+    skipList.insertElement(60, "Fig_1");
     //---------------------------------------------
-    skipList.insertElement(1, "Banana_0", 1);
-    skipList.insertElement(5, "Apple", 2);
-    skipList.insertElement(7, "Apple_1", 1);
-    skipList.insertElement(10, "Banana_1", 2);
-    skipList.insertElement(20, "Date", 3);
-    skipList.insertElement(23, "Elderberry", 2);
-    skipList.insertElement(15, "Cherry", 1);
-    skipList.insertElement(25, "Elderberry_1", 2);
-    skipList.insertElement(30, "Fig", 1);
-    skipList.insertElement(60, "Fig_1", 3);
+    // skipList.insertElement(1, "Banana_0", 1);
+    // skipList.displayList_2();
+    // skipList.insertElement(5, "Apple", 2);
+    // skipList.insertElement(7, "Apple_1", 1);
+    // skipList.insertElement(10, "Banana_1", 2);
+    // skipList.insertElement(20, "Date", 3);
+    // skipList.insertElement(23, "Elderberry", 2);
+    // skipList.insertElement(15, "Cherry", 1);
+    // skipList.insertElement(25, "Elderberry_1", 2);
+    // skipList.insertElement(30, "Fig", 1);
+    // skipList.insertElement(60, "Fig_1", 3);
 
     cout << "\nFull SkipList:\n";
-    //skipList.displayList();
-    skipList.displayList_2();
+    skipList.displayList();
+    //skipList.displayList_2();
 
-    // cout << "\nRange Query [25, 60]:\n";
-    // auto results = skipList.rangeQuery(25, 60);
-    // for (const auto& [k, v] : results) {
-    //     cout << k << " => " << v << endl;
-    // }
+    cout << "\nRange Query [25, 60]:\n";
+    auto results = skipList.rangeQuery(25, 60);
+    for (const auto& [k, v] : results) {
+        cout << k << " => " << v << endl;
+    }
 
     return 0;
 }
