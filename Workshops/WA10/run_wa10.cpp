@@ -63,6 +63,8 @@ public:
         y->right = g;
 
         y = x;
+        updateMetadata(y->left); // old root, now right child
+        updateMetadata(y);        // new root
     }
 
     void insert(shared_ptr<TreapNode<T>> &root, T key)
@@ -70,6 +72,7 @@ public:
         if (!root)
         {
             root = make_shared<TreapNode<T>>(key);
+            updateMetadata(root);
             return;
         }
 
@@ -78,11 +81,13 @@ public:
         if (root->left && root->left->priority > root->priority)
         {
             right_rotation(root);
+            updateMetadata(root);
         }
 
         if (root->right && root->right->priority > root->priority)
         {
             left_rotation(root);
+            updateMetadata(root);
         }
     }
 
@@ -91,6 +96,7 @@ public:
         if (root == nullptr)
         {
             root = make_shared<TreapNode<T>>(key, priority);
+            updateMetadata(root);
             return;
         }
 
@@ -99,12 +105,15 @@ public:
         if (root->left && root->left->priority > root->priority)
         {
             right_rotation(root);
+            updateMetadata(root);
         }
 
         if (root->right && root->right->priority > root->priority)
         {
             left_rotation(root);
+            updateMetadata(root);
         }
+        updateMetadata(root);
     }
 
     bool remove(shared_ptr<TreapNode<T>> &root, T key)
@@ -116,11 +125,15 @@ public:
 
         if (key < root->key)
         {
-            return remove(root->left, key);
+            bool result = remove(root->left, key);
+            updateMetadata(root);   // ← fix the parent after the child changes
+            return result;
         }
         if (key > root->key)
         {
-            return remove(root->right, key);
+            bool result = remove(root->right, key);
+            updateMetadata(root);   // ← fix the parent after the child changes
+            return result;
         }
 
         if (!root->left && !root->right)
@@ -131,6 +144,7 @@ public:
         {
             shared_ptr<TreapNode<T>> child = (root->left) ? root->left : root->right;
             root = child;
+            updateMetadata(root);
         }
         else
         {
@@ -320,7 +334,11 @@ public:
         {
             output[level] += string(space, ' ');
         }
-        string nodeData = SP + to_string(node->key) + "(" + to_string(node->priority) + ")" + SP;
+        string nodeData = SP + to_string(node->key) + "(" + 
+                            to_string(node->priority) +  
+                            "-" + to_string(node->subtreeSum) + 
+                            "-" + to_string(node->subtreeCount) + 
+                            ")" + SP;
         output[level] += nodeData;
 
         // Add vertical link above
