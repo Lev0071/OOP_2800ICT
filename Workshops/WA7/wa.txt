@@ -1,0 +1,140 @@
+#ifndef NOGRADES_EXCEPTION_HPP
+#define NOGRADES_EXCEPTION_HPP
+
+#include <iostream>                             /*(1)*/
+#include <stdexcept>                            /*(2)*/
+#include <string>   
+#include <exception>
+#include <string>
+using namespace std;
+
+class NoGradesException: public exception{
+    private:
+        string message;
+    public:
+        NoGradesException(const string& msg):message(msg){}
+        // Override what() to return the custom message  
+        virtual const char* what() const noexcept override{
+            return message.c_str();
+        }
+};
+
+#endif
+
+#pragma once
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <numeric>
+#include <sstream>
+#include "NoGradesException.hpp"
+
+using namespace std;
+
+class Student{
+    private:
+        string name;
+        vector<double> grades;
+    public:
+        Student(string nm):name(nm){}
+
+        void addGrade(double grade){
+            if(grade <0 || grade > 100){
+                throw invalid_argument("Invalid grade. Must be between 0.0 and 100.0");
+            }else{
+                grades.push_back(grade);
+            }
+        }
+
+        double averageGrade() const {
+            if(!hasGrades()){
+                ostringstream oss;
+                oss << name << ": No grades available.";
+                string message = oss.str();
+                throw NoGradesException(message);
+            } else {
+                return (accumulate(grades.begin(), grades.end(), 0.0))/grades.size();
+            }
+        }
+
+        string getName() const {return name;}
+
+        bool hasGrades() const { return !grades.empty();}
+
+        //~Student(){ cout << "Student: " << name << "removed from record..." << endl;}
+};
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <utility>
+#include <iomanip>  // for std::setprecision
+
+
+#include "Student.hpp"
+using namespace  std;
+
+bool isZero(const pair<Student,double>& avGrade) {
+    return avGrade.second == 0.0;
+}
+
+bool topGradesFirst(const pair<Student,double>& a,const pair<Student,double>& b){
+    return a.second > b.second;
+}
+
+class StudentManager{
+    private:
+        vector<Student> students;
+    public:
+        StudentManager():students() {}
+        void operator()() const {
+            cout << "Student Management System" << endl;
+            if(students.empty()){
+                cout << "None." << endl;
+            }else{
+                for(auto student:students){
+                if(student.hasGrades()){
+                    cout << student.getName() << " : " << fixed << setprecision(2) << student.averageGrade() << endl;
+                }else{
+                    cout << student.getName() << " : " << "No grades available" << endl;
+                }
+            }
+            }
+        } 
+
+        void addStudent(const Student& student){students.push_back(student);}
+        void filterFailingStudents() const {
+            int failCount = 0;
+            cout << "Failing students:" << endl;
+            for(const Student& student : students){
+                if(student.hasGrades() && student.averageGrade()<50.0){
+                    cout << " - " << student.getName() << endl;
+                    failCount++; 
+                }
+            }
+            if(failCount == 0){
+                cout << "None" << endl;
+            }
+        }
+
+        void printTopStudents(int n) const {
+            vector<pair<Student,double>> averages;
+            for(const Student& student:students){
+                if (student.hasGrades()){
+                    averages.push_back(make_pair(student,student.averageGrade()));
+                }
+            }
+            auto removeEnd = remove_if(averages.begin(), averages.end(), isZero);
+            averages.erase(removeEnd,averages.end());
+            sort(averages.begin(), averages.end(), topGradesFirst);
+
+            if(averages.empty()){
+                cout << "None." << endl;
+            }else{
+                for(auto it = averages.begin(); it != averages.end() && it != averages.begin() + n; ++it){
+                    cout << it->first.getName() << " : " << fixed << setprecision(2) << it->second << endl;
+                }
+            }
+        };
+};
