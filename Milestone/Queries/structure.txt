@@ -1,0 +1,28 @@
+/YourProjectRoot
+│
+├── /src/           ← All your main C++ source files and headers
+│   ├── main.cpp
+│   ├── Encryptor.cpp
+│   ├── Encryptor.hpp
+│   ├── Decryptor.cpp
+│   ├── Decryptor.hpp
+│   ├── Grid.cpp
+│   ├── Grid.hpp
+│   ├── Menu.cpp
+│   ├── Menu.hpp
+│   └── Utils.hpp   ← For helper functions if needed
+│
+├── /res/           ← (Optional) For sample messages, input test files, or text resources
+│   ├── sample_input.txt
+│   ├── README.txt
+│
+├── /test/          ← For your separate test cases while you develop
+│   ├── test_main.cpp
+│   ├── test_Encryptor.cpp
+│   ├── test_Decryptor.cpp
+│   └── test_Grid.cpp
+│
+├── week11.txt      ← Full plain text source for plagiarism check
+├── week11.pdf      ← UML, screenshots, documentation
+├── Makefile or build.sh (optional) ← If you want to compile with simple commands
+└── week11.zip      ← When ready, zip your /src only (or all .cpp/.hpp files) for submission
