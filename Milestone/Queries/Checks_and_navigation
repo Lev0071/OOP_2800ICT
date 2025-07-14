@@ -1,0 +1,37 @@
+Correct guard checks to keep the flow safe
+| Menu Option                                       | Required Previous Step                            | Guard Check                     |   |                      |
+| ------------------------------------------------- | ------------------------------------------------- | ------------------------------- | - | -------------------- |
+| `/*L2_E5*/` One-round encryption                  | `/*L2_E4*/` Enter a message                       | `if (message.empty())`          |   |                      |
+| `/*L2_E6*/` Multi-round encryption                | `/*L2_E4*/` Enter a message                       | `if (message.empty())`          |   |                      |
+| `/*L3_E6*/` Print grid and encoded                | `/*L3_E4*/` or `/*L3_E5*/` Grid must be generated | `if (grid.empty())`             |   |                      |
+| `/*L2_D5*/` Enter round number                    | `/*L2_D4*/` Enter encrypted message               | `if (encryptedMessage.empty())` |   |                      |
+| `/*L2_D6*/` Print grid + decoded                  | `/*L2_D4*/` and `/*L2_D5*/` both done             | \`if (encryptedMessage.empty()  |   | !roundNumberValid)\` |
+| `/*L3_ME5*/` For each round, print grid + encoded | `/*L3_ME4*/` Enter round number                   | `if (!roundNumberValid)`        |   |                      |
+
+Full Navigation Guard Checklist
+| Menu Option  | Required State                                 |
+| ------------ | ---------------------------------------------- |
+| `/*L2_E5*/`  | message != empty                               |
+| `/*L2_E6*/`  | message != empty                               |
+| `/*L2_D5*/`  | encryptedMessage != empty                      |
+| `/*L2_D6*/`  | encryptedMessage != empty AND roundNumberValid |
+| `/*L3_E4*/`  | message != empty                               |
+| `/*L3_E5*/`  | message != empty                               |
+| `/*L3_E6*/`  | gridGenerated == true                          |
+| `/*L3_ME4*/` | message != empty                               |
+| `/*L3_ME5*/` | roundNumberValid == true                       |
+
+
+FULL ENUMERATED CHECKLIST
+| #  | Menu Item              | Condition            | Guard                      | Error Message                                       |
+| -- | ---------------------- | -------------------- | -------------------------- | --------------------------------------------------- |
+| E1 | /*L2\_E5*/, /*L2\_E6*/ | No message           | `message.empty()`          | "Enter a message first (/*L2\_E4*/)."               |
+| D1 | /*L2\_D5*/, /*L2\_D6*/ | No encrypted message | `encryptedMessage.empty()` | "Enter an encrypted message first (/*L2\_D4*/)."    |
+| D2 | /*L2\_D6*/             | No round number      | `!roundNumberValid`        | "Enter the round number first (/*L2\_D5*/)."        |
+| E3 | /*L3\_E4*/, /*L3\_E5*/ | No message           | `message.empty()`          | "Enter a message first (/*L2\_E4*/)."               |
+| E4 | /*L3\_E4*/             | Grid size invalid    | odd & ≥ message length     | "Grid size must be odd and big enough."             |
+| E5 | /*L3\_E6*/             | No grid generated    | `!gridGenerated`           | "Generate a grid first (/*L3\_E4*/ or /*L3\_E5*/)." |
+| E6 | /*L3\_ME4*/            | No message           | `message.empty()`          | "Enter a message first (/*L2\_E4*/)."               |
+| E7 | /*L3\_ME5*/            | No round number      | `!roundNumberValid`        | "Enter the round number first (/*L3\_ME4*/)."       |
+| U1 | Any input              | Bad input type       | isdigit, bounds            | "Invalid option."                                   |
+| U2 | Round number           | Invalid value        | round ≤ 0                  | "Round must be greater than zero."                  |
